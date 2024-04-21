@@ -20,24 +20,24 @@ from math import pi
 #    volume(h=19)
 #    volume(h=8)
 #    volume(r=5,h=9)
-def catch_error(print_message):
-    def inner(func):
-        @wraps(func)
-        def wrapper(*args, **kwargs):
-            try:
-                func(*args, **kwargs)
-            except KeyError:
-                if print_message:("Error happend")
+#def catch_error(print_message):
+#    def inner(func):
+#        @wraps(func)
+#        def wrapper(*args, **kwargs):
+#            try:
+#                func(*args, **kwargs)
+#            except KeyError:
+#                if print_message:("Error happend")
 #                else:
 #                    pass
 #            return wrapper
 #        return inner
 
-#import time
-#import logging
+import time
+import logging
 
-#logging.basicConfig(...)
-#logger = logging.getLogger(__name__)
+logging.basicConfig(filename='time.log', level=logging.DEBUG, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def first_decorator(func):
     def wrapper():
@@ -55,22 +55,24 @@ def second_decorator(func):
         print("Second out")
     return wrapper
 
-def log_decorator(func):
-    def wrapper():
+def log_decorator(debug=True):
+    def decorator(func):
+        def wrapper():
         # запам'ятовує час початку виконання задекорованої функції
-        start_time = ...
-        if debug:
-            logger.info(f"Execution started at {start_time}")
-        func()
-        end_time = ...
-        if debug:
-            logger.info(f"Execution ended at {end_time}")
-        logger.info(f"Execution took {end_time - start_time}")
-    return wrapper
+            start_time = time.time()
+            if debug:
+                logger.info(f"Execution started at {start_time}")
+            func()
+            end_time = time.time()
+            if debug:
+                logger.info(f"Execution ended at {end_time}")
+            logger.info(f"Execution took {end_time - start_time}")
+        return wrapper
+    return decorator
 
 # @second_decorator
 # @first_decorator
-@log_decorator(debug=False)
+@log_decorator(debug=True)
 def long_function():
     time.sleep(5)
     print("Inside the function")
