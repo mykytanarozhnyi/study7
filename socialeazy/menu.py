@@ -21,19 +21,9 @@ if __name__ == "__main__":
                 for entry in Post.entries:
                     print(entry)
             case "3":
-                post_id = input("Enter the ID post to like: ")
-                for entry in Post.entries:
-                    if entry.id == int(post_id):
-                        entry.like()
-                        print(entry.likes)
-                        break
+                Post.like()
             case "4":
-                post_id = input("Enter the ID post to dislike: ")
-                for entry in Post.entries:
-                    if entry.id == int(post_id):
-                        entry.dislike()
-                        print(entry.dislikes)
-                        break
+                Post.dislike()
             case "5":
                 post_id = input("Enter the ID post to see rating:")
                 for entry in Post.entries:

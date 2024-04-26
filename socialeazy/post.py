@@ -1,5 +1,19 @@
 from datetime import datetime
 
+class Person:
+    def __init__(self, age):
+        self._age = age
+    @property
+    def age(self):
+        return self._age
+    @age.setter
+    def age(self,value):
+        if value > 150:
+            raise ValueError()
+        self._age = value
+    @age.deleter
+    def age(self):
+        del self._age
 
 class Content:
 
@@ -7,10 +21,15 @@ class Content:
         self.author = input("Enter nickname: ")
         self.text = input("Write your post: ")
         self.created_at = datetime.now()
+def get_rating(post):
+    return post.rating()
 
     def __str__(self):
-        return f"{self.author} said at {self.created_at}: {self.text}"
+        return (f"{self.author} said at {self.created_at}: {self.text}"
+        + f"Likes: {self.likes}" | "Dislikes: {self.dislikes}")
 
+def __eq__(self,other):
+    return self.rating == other.rating
 
 class Post(Content):
     entries = list()
@@ -21,13 +40,26 @@ class Post(Content):
         self.id = len(self.entries)
         self.likes = 0
         self.dislikes = 0
+    @classmethod
+    def show_posts(cls):
+        for entry in sorted(cls.entries, reverse=True):
+            print(entry)
+    @classmethod
+    def find_by_id(cls):
+        post_id = input("Enter post id: ")
+        for post in cls.entries:
+            if post.id == int(post_id):
+                return post
+    @classmethod
+    def like(cls):
+        post = cls.find_by_id()
+        post.likes += 1
 
-    def like(self):
-        self.likes += 1
-
-    def dislike(self):
-        self.dislikes += 1
-
+    @classmethod
+    def dislike(cls):
+        post = cls.find_by_id()
+        post.dislikes += 1
+    @property
     def rating(self):
         return self.likes - self.dislikes
 
@@ -51,3 +83,11 @@ class Comment(Content):
 
     def __str__(self):
         return f"{self.author} commented on {self.post_id}: {self.text}"
+
+if __name__ == "__main__":
+
+    post1 = Post() #rating 1
+    post2 = Post() #rating -1
+    Post.like(1)
+    Post.dislike(2)
+    print(post1 == post2)
