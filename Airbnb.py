@@ -55,5 +55,6 @@ if __name__ == "__main__":
     # Бронюємо помешкання
     Booking.book("John", "2024-4-21", "2024-4-25", flat1)
     Booking.book("Alice", "2024-4-24", "2024-4-30", flat2)
-
+    Booking.book("Hike","2024-3-25","2024-5-26",flat1)
+    Booking.book("Mykyta","2024-5-1","2024-5-7",flat2)
 

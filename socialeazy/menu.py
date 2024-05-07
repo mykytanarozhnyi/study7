@@ -28,7 +28,7 @@ if __name__ == "__main__":
                 post_id = input("Enter the ID post to see rating:")
                 for entry in Post.entries:
                     if entry.id == int(post_id):
-                        print(entry.rating())
+                        print(entry.get_rating())
                         break
             case "0":
                 break

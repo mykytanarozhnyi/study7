@@ -21,8 +21,6 @@ class Content:
         self.author = input("Enter nickname: ")
         self.text = input("Write your post: ")
         self.created_at = datetime.now()
-def get_rating(post):
-    return post.rating()
 
     def __str__(self):
         return (f"{self.author} said at {self.created_at}: {self.text}"
@@ -54,14 +52,31 @@ class Post(Content):
     def like(cls):
         post = cls.find_by_id()
         post.likes += 1
-
     @classmethod
     def dislike(cls):
         post = cls.find_by_id()
         post.dislikes += 1
-    @property
-    def rating(self):
+
+    def get_rating(self):
         return self.likes - self.dislikes
+
+    def __eq__(self, other):
+        return self.get_rating() == other.get_rating()
+
+    def __lt__(self, other):
+        return self.get_rating() < other.get_rating()
+
+    def __gt__(self, other):
+        return self.get_rating() > other.get_rating()
+
+    def __le__(self, other):
+        return self.get_rating() <= other.get_rating()
+
+    def __ge__(self, other):
+        return self.get_rating() >= other.get_rating()
+
+    def __ne__(self, other):
+        return self.get_rating() != other.get_rating()
 
     def __str__(self):
         return f"#{self.id} {self.author} said: {self.text}Likes: {self.likes} | Dislikes: {self.dislikes}"
