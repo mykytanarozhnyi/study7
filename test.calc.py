@@ -1,5 +1,6 @@
 import unittest
 import calc
+
 class TestCalc(unittest.TestCase):
 
     def test_of_test(self):
@@ -10,9 +11,9 @@ class TestCalc(unittest.TestCase):
         result = calc.sub(10,5)
         self.assertEqual(result, 5)
 
-    def test_sub(self):
-        result = calc.sub(5,10)
-        self.assertEqual(result, -5)
+    def test_mult(self):
+        result = calc.
+
 
 
 if __name__ == '__main__':

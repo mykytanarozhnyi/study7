@@ -1,9 +1,8 @@
 import json
 import csv
-
 class WriteFileContext:
     def __init__(self,filename):
-        self.filename = filename
+        self.filename = "books.json"
 
     def __enter__(self):
         self.file = open(self.filename, "w")
