@@ -1,5 +1,6 @@
 import json
 import csv
+from contextlib import contextmanager
 class WriteFileContext:
     def __init__(self,filename):
         self.filename = "books.json"
@@ -13,6 +14,15 @@ class WriteFileContext:
             print(traceback)
         self.file.close()
         #return True
+def write_file_context(filename):
+    file = open(filename,"w")
+    try:
+        yield file
+    except Exception as error:
+    finally:
+        file.close
+
+
 
 if __name__ == "__main__":
 
