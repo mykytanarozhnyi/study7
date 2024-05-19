@@ -7,7 +7,7 @@ class TestCalc(unittest.TestCase):
         self.assertTrue(True)
     def test_add(self):
         result = Calc.add(2,2)
-        self.assertEqual(result, 15)
+        self.assertEqual(result, 4)
 
     def test_sub(self):
         result = Calc.sub(10,5)
