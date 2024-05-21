@@ -35,6 +35,23 @@ class LinkedList:
             print(current)
             current = current.next
 
+    def __iter__(self):
+        self._current = self.head
+        return self
+
+    def __next__(self):
+        if self._current:
+            current_node = self._current
+            self._current = self._current.next
+            return current_node
+        else:
+            raise StopIteration
+
+
+
+
+
+
 if __name__ == "__main__":
     node1 = Node(1,5)
     container = LinkedList()
@@ -45,3 +62,5 @@ if __name__ == "__main__":
 
     for node in container:
         print(node)
+
+
