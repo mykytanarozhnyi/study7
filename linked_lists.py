@@ -7,6 +7,7 @@ class Node:
 
     def __str__(self):
         return f"Node {self.id}: value {self.value}"
+
 class LinkedList:
 
     def __init__(self):
