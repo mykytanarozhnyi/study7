@@ -36,6 +36,25 @@ class LinkedList:
             print(current)
             current = current.next
 
+    def find_node_by_id(self, _id):
+        current = self.head
+        while current:
+            if current.id == _id:
+                return current
+            current = current.next
+        return None
+
+    def remove_last_node(self):
+        if not self.head:
+            return
+        if not self.head.next:
+            self.head = None
+            return
+        current = self.head
+        while current.next.next:
+            current = current.next
+        current.next = None
+
     def __iter__(self):
         self._current = self.head
         return self
@@ -64,4 +83,10 @@ if __name__ == "__main__":
     for node in container:
         print(node)
 
+    print("\nFinding node with id:")
+    node = container.find_node_by_id(3)
+    print(node if node else "Node not found")
 
+    print("\nRemoving last node:")
+    container.remove_last_node()
+    container.print_nodes()
