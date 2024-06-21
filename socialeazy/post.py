@@ -5,14 +5,17 @@ import hashlib
 class Person:
     def __init__(self, age):
         self._age = age
+
     @property
     def age(self):
         return self._age
+
     @age.setter
     def age(self, value):
         if value > 150:
             raise ValueError()
         self._age = value
+
     @age.deleter
     def age(self):
         del self._age
@@ -27,40 +30,62 @@ class Content:
         return (f"{self.author} said at {self.created_at}: {self.text}"
                 + f" Likes: {self.likes} | Dislikes: {self.dislikes}")
 
-def __eq__(self, other):
-    return self.rating == other.rating
-
 class Post(Content):
-    entries = list()
-
-    def __init__(self):
+    def __init__(self, author_id):
+        self.author_id = author_id
         super().__init__()
-        self.entries.append(self)
-        self.id = len(self.entries)
         self.likes = 0
         self.dislikes = 0
+        self.save_post()
+
+    def save_post(self):
+        Userlogin.cursor.execute("""
+            INSERT INTO posts (author_id, content, created_at, likes, dislikes)
+            VALUES (?, ?, ?, ?, ?)
+        """, (self.author_id, self.text, self.created_at, self.likes, self.dislikes))
+        Userlogin.conn.commit()
+        self.id = Userlogin.cursor.lastrowid
 
     @classmethod
     def show_posts(cls):
-        for entry in sorted(cls.entries, reverse=True):
-            print(entry)
+        Userlogin.cursor.execute("""
+            SELECT p.id, u.first_name, u.last_name, p.content, p.created_at, p.likes, p.dislikes 
+            FROM posts p JOIN userseazy u ON p.author_id = u.id
+        """)
+        posts = Userlogin.cursor.fetchall()
+        for post in posts:
+            print(f"#{post[0]} {post[1]} {post[2]} said at {post[4]}: {post[3]} Likes: {post[5]} | Dislikes: {post[6]}")
 
     @classmethod
-    def find_by_id(cls):
-        post_id = input("Enter post id: ")
-        for post in cls.entries:
-            if post.id == int(post_id):
-                return post
+    def find_by_id(cls, post_id):
+        Userlogin.cursor.execute("""
+            SELECT * FROM posts WHERE id=?
+        """, (post_id,))
+        post = Userlogin.cursor.fetchone()
+        if post:
+            return post
+        else:
+            print("Post not found")
+            return None
 
     @classmethod
-    def like(cls):
-        post = cls.find_by_id()
-        post.likes += 1
-
+    def like(cls, post_id):
+        post = cls.find_by_id(post_id)
+        if post:
+            likes = post[5] + 1
+            Userlogin.cursor.execute("""
+                UPDATE posts SET likes=? WHERE id=?
+            """, (likes, post_id))
+            Userlogin.conn.commit()
     @classmethod
-    def dislike(cls):
-        post = cls.find_by_id()
-        post.dislikes += 1
+    def dislike(cls,post_id):
+        post = cls.find_by_id(post_id)
+        if post:
+            dislikes = post [5] + 1
+            Userlogin.cursor.execute("""
+            UPDATE posts SET dislikes=? WHERE id=?
+            """,(dislikes, post_id))
+            Userlogin.conn.commit()
 
     def get_rating(self):
         return self.likes - self.dislikes
@@ -92,17 +117,26 @@ class Userlogin:
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS userseazy (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             first_name TEXT,
             last_name TEXT,
             email TEXT UNIQUE,
             password TEXT
-        )
+            )
     """)
     conn.commit()
 
-    @staticmethod
-    def hash_password(password):
-        return hashlib.sha256(password.encode()).hexdigest()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS posts (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            author_id INTEGER,
+            content TEXT,
+            created_at TIMESTAMP,
+            FOREIGN KEY(author_id) REFERENCES userseazy(id)
+            )
+    """)
+    conn.commit()
+
     @staticmethod
     def register_user():
         first_name = input("Enter your first name: ")
@@ -113,41 +147,39 @@ class Userlogin:
             password1 = input("Enter your password: ")
             password2 = input("Confirm your password: ")
 
-
             if password1 == password2:
-                hashed_password = Userlogin.hash_password(password2)
-                print("You have successfully registered!")
-                break
+                password_hash = hashlib.sha256(password1.encode()).hexdigest()
+                try:
+                    Userlogin.cursor.execute("""
+                        INSERT INTO userseazy (first_name, last_name, email, password)
+                        VALUES (?,?,?,?)
+                    """, (first_name, last_name, email, password_hash))
+                    Userlogin.conn.commit()
+                    print("You have successfully created an account.")
+                    break
+                except sqlite3.IntegrityError:
+                    print("Error: This email is already registered")
+                    break
             else:
                 print("Your passwords must match")
-
-        try:
-            Userlogin.cursor.execute("""
-                INSERT INTO userseazy (first_name, last_name, email, password)
-                VALUES (?, ?, ?, ?)
-            """, (first_name, last_name, email, hashed_password))
-            Userlogin.conn.commit()
-            print("You have successfully created an account.")
-        except sqlite3.IntegrityError:
-            print("Error: This email is already registered")
 
     @staticmethod
     def login_user():
         email = input("Enter your email: ")
         password = input("Enter your password: ")
-        hashed_password = Userlogin.hash_password(password)
+        password_hash = hashlib.sha256(password.encode()).hexdigest()
 
         Userlogin.cursor.execute("""
             SELECT * FROM userseazy WHERE email=? AND password=?
-        """, (email, hashed_password))
+        """, (email, password_hash))
         user = Userlogin.cursor.fetchone()
 
         if user:
             print("You have successfully logged in.")
-            return True
+            return user[0]  # Return user ID
         else:
             print("Error: Invalid email or password")
-            return False
+            return None
 
 class Image:
     pass
