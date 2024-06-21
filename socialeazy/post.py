@@ -1,5 +1,6 @@
 from datetime import datetime
 import sqlite3
+import hashlib
 
 class Person:
     def __init__(self, age):
@@ -100,6 +101,9 @@ class Userlogin:
     conn.commit()
 
     @staticmethod
+    def hash_password(password):
+        return hashlib.sha256(password.encode()).hexdigest()
+    @staticmethod
     def register_user():
         first_name = input("Enter your first name: ")
         last_name = input("Enter your last name: ")
@@ -109,7 +113,9 @@ class Userlogin:
             password1 = input("Enter your password: ")
             password2 = input("Confirm your password: ")
 
+
             if password1 == password2:
+                hashed_password = Userlogin.hash_password(password2)
                 print("You have successfully registered!")
                 break
             else:
@@ -119,7 +125,7 @@ class Userlogin:
             Userlogin.cursor.execute("""
                 INSERT INTO userseazy (first_name, last_name, email, password)
                 VALUES (?, ?, ?, ?)
-            """, (first_name, last_name, email, password2))
+            """, (first_name, last_name, email, hashed_password))
             Userlogin.conn.commit()
             print("You have successfully created an account.")
         except sqlite3.IntegrityError:
@@ -129,10 +135,11 @@ class Userlogin:
     def login_user():
         email = input("Enter your email: ")
         password = input("Enter your password: ")
+        hashed_password = Userlogin.hash_password(password)
 
         Userlogin.cursor.execute("""
             SELECT * FROM userseazy WHERE email=? AND password=?
-        """, (email, password))
+        """, (email, hashed_password))
         user = Userlogin.cursor.fetchone()
 
         if user:
