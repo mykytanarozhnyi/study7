@@ -72,19 +72,20 @@ class Post(Content):
     def like(cls, post_id):
         post = cls.find_by_id(post_id)
         if post:
-            likes = post[5] + 1
+            likes = post[4] + 1  # likes are at index 4
             Userlogin.cursor.execute("""
                 UPDATE posts SET likes=? WHERE id=?
             """, (likes, post_id))
             Userlogin.conn.commit()
+
     @classmethod
-    def dislike(cls,post_id):
+    def dislike(cls, post_id):
         post = cls.find_by_id(post_id)
         if post:
-            dislikes = post [5] + 1
+            dislikes = post[5] + 1  # dislikes are at index 5
             Userlogin.cursor.execute("""
-            UPDATE posts SET dislikes=? WHERE id=?
-            """,(dislikes, post_id))
+                UPDATE posts SET dislikes=? WHERE id=?
+            """, (dislikes, post_id))
             Userlogin.conn.commit()
 
     def get_rating(self):
@@ -132,6 +133,8 @@ class Userlogin:
             author_id INTEGER,
             content TEXT,
             created_at TIMESTAMP,
+            likes INTEGER DEFAULT 0,
+            dislikes INTEGER DEFAULT 0,
             FOREIGN KEY(author_id) REFERENCES userseazy(id)
             )
     """)
