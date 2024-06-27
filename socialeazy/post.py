@@ -113,7 +113,7 @@ class Post(Content):
         return f"#{self.id} {self.author} said: {self.text} Likes: {self.likes} | Dislikes: {self.dislikes}"
 
 class Userlogin:
-    conn = sqlite3.connect('loginsocialeazy.db')
+    conn = sqlite3.connect('newsocial.db')
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -197,10 +197,3 @@ class Comment(Content):
 
     def __str__(self):
         return f"{self.author} commented on {self.post_id}: {self.text}"
-
-if __name__ == "__main__":
-    post1 = Post()  # rating 1
-    post2 = Post()  # rating -1
-    Post.like(1)
-    Post.dislike(2)
-    print(post1 == post2)

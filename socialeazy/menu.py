@@ -1,5 +1,4 @@
 from post import Post, Userlogin
-import sqlite3
 
 def main():
     while True:
