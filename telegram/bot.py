@@ -2,8 +2,17 @@ from aiogram import Bot, Dispatcher, F, types
 import asyncio
 from aiogram.filters.command import Command
 from aiogram.enums import ParseMode
+from dotenv import load_dotenv
+import os
 
-bot = Bot(token="7391481973:AAH5VOeFllAuq1yyumo7y5yc6qc50E3kASk")
+# Завантаження змінних середовища з .env файлу
+load_dotenv()
+
+TELEGRAM_BOT_KEY = os.getenv('TELEGRAM_BOT_KEY')
+if TELEGRAM_BOT_KEY is None:
+    raise ValueError("No TELEGRAM_BOT_KEY found in environment variables")
+
+bot = Bot(token=TELEGRAM_BOT_KEY)
 
 dispatcher = Dispatcher()
 @dispatcher.message(Command("start"))
