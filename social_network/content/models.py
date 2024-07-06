@@ -13,7 +13,7 @@ class Post(models.Model):
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='liked_posts')
     dislikes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name='disliked_posts')
 
-    def get_rating(self):
+    def rating(self):
         return self.likes.count() - self.dislikes.count()
 
     def __str__(self):

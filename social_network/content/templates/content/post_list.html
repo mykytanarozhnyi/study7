@@ -1,0 +1,22 @@
+<!-- content/templates/content/post_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Posts</title>
+</head>
+<body>
+    <h1>Posts</h1>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.content }}</p>
+                <p><strong>Author:</strong> {{ post.author.username }}</p>
+                <p><strong>Likes:</strong> {{ post.likes }}</p>
+                <p><strong>Dislikes:</strong> {{ post.dislikes }}</p>
+                <p><strong>Rating:</strong> {{ post.rating }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

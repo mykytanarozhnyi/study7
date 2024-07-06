@@ -65,3 +65,7 @@ def create_post(request):
     else:
         form = PostForm()
     return render(request, 'content/create_post.html', {'form': form})
+
+def post_list(request):
+    posts = Post.objects.all().order_by('-likes', 'dislikes')
+    return render(request, 'content/post_list.html', {'posts': posts})
