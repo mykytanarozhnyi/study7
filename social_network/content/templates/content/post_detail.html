@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ post.title }}</title>
+</head>
+<body>
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <p>Likes: {{ post.likes.count }}</p>
+    <p>Dislikes: {{ post.dislikes.count }}</p>
+    <p>Rating: {{ post.get_rating }}</p>
+    <a href="{% url 'like_post' post.id %}">Like</a>
+    <a href="{% url 'dislike_post' post.id %}">Dislike</a>
+</body>
+</html>

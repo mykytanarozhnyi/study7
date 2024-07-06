@@ -4,5 +4,11 @@ from . import views
 urlpatterns = [
     path('posts/', views.posts_list, name='posts_list'),
     path('posts/<int:post_id>/', views.post_details, name='post_details'),
-    path('hello/<str:username>/', views.hello, name='say_hello')
+    path('hello/<str:username>/', views.hello, name='say_hello'),
+    path('index/', views.index ,name="posts_index"),
+    path('post/<int:post_id>/', views.post_detail, name='post_detail'),
+    path('post/<int:post_id>/like/', views.like_post, name='like_post'),
+    path('post/<int:post_id>/dislike/', views.dislike_post, name='dislike_post'),
+    path('create/', views.create_post, name='create_post')
+
 ]

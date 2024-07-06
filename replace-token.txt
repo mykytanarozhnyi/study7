@@ -1,0 +1,1 @@
+regex:bot = Bot\(token="[^"]+"\)==>bot = Bot(token="REMOVED")
