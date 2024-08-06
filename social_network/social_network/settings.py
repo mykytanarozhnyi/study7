@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'content',
     'usering'# Додайте ваш додаток content тут
+    'rest_framework'
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,10 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 from . import views
 from . import views as content_views
+from . import api_views
+
+routers = routers.DefaultRouter()
 
 urlpatterns = [
     path('posts/', views.posts_list, name='posts_list'),
@@ -12,5 +16,6 @@ urlpatterns = [
     path('post/<int:post_id>/dislike/', views.dislike_post, name='dislike_post'),
     path('create/', views.create_post, name='create_post'),
     path('', content_views.post_list)
+    #path("api/post/", views.api_posts, name="posts_")
 
 ]

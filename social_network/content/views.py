@@ -66,6 +66,15 @@ def create_post(request):
         form = PostForm()
     return render(request, 'content/create_post.html', {'form': form})
 
+def api_posts(request):
+    result = list()
+    for posts in Post.objects.all()
+        result.appent{
+            "id": posts.id,
+            "title": posts.title
+            "text": post.text
+        }
+    return HttpResponse()
 def post_list(request):
     posts = Post.objects.all().order_by('-likes', 'dislikes')
     return render(request, 'content/post_list.html', {'posts': posts})
